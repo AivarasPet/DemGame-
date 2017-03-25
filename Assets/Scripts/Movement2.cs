@@ -56,6 +56,9 @@ public partial class Movement {
             if (player_speed == 0) isrunning = false;
         }
 
+        //Loading Menu
+        if (Input.GetKeyDown(KeyCode.Escape)) Application.LoadLevel("MenuInGame");
+
         if (Input.GetKeyUp(KeyCode.D) && isrunning == true) Debug.Log("yes");
 
         //drifting
