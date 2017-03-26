@@ -5,7 +5,11 @@ using UnityEngine.UI;
 public class CoinDetectionScript : MonoBehaviour {
 
     public int coin;
-    public Text coincount;
+    private Text coincount;
+    void Start()
+    {
+        coincount = GameObject.Find("CoinCounter").GetComponent<Text>();
+    }
 
     void OnTriggerEnter2D(Collider2D col)
     {

@@ -81,17 +81,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Fade.cs" />
-    <Compile Include="Assets\FadeCanvas.cs" />
-    <Compile Include="Assets\MenuScript.cs" />
     <Compile Include="Assets\Scripts\CameraView.cs" />
-    <Compile Include="Assets\Scripts\CoinDetection.cs" />
     <Compile Include="Assets\Scripts\CoinDetectionScript.cs" />
-    <Compile Include="Assets\Scripts\GrappHook.cs" />
-    <Compile Include="Assets\Scripts\GrappHook2.cs" />
-    <Compile Include="Assets\Scripts\GrappHook3.cs" />
-    <Compile Include="Assets\Scripts\GrappHook4.cs" />
+    <Compile Include="Assets\Scripts\ExitButton.cs" />
+    <Compile Include="Assets\Scripts\Fade.cs" />
+    <Compile Include="Assets\Scripts\FadeCanvas.cs" />
     <Compile Include="Assets\Scripts\Health.cs" />
+    <Compile Include="Assets\Scripts\Hook\GrappHook.cs" />
+    <Compile Include="Assets\Scripts\Hook\GrappHook2.cs" />
+    <Compile Include="Assets\Scripts\Hook\GrappHook3.cs" />
+    <Compile Include="Assets\Scripts\Hook\GrappHook4.cs" />
+    <Compile Include="Assets\Scripts\MenuScript.cs" />
     <Compile Include="Assets\Scripts\Movement.cs" />
     <Compile Include="Assets\Scripts\Movement2.cs" />
     <Compile Include="Assets\Scripts\PlayerAttack.cs" />
@@ -99,7 +99,8 @@
     <Compile Include="Assets\Scripts\Skeleton_AI.cs" />
     <Compile Include="Assets\Scripts\Talking.cs" />
     <Compile Include="Assets\Scripts\TestArea.cs" />
-    <Compile Include="Assets\Scripts\coin.cs" />
+    <Compile Include="Assets\Scripts\TestAreaButton.cs" />
+    <Compile Include="Assets\Scripts\barrel.cs" />
     <Compile Include="Assets\Scripts\player detectors\GroundDetection.cs" />
     <Compile Include="Assets\Scripts\player detectors\LandingDetection.cs" />
     <Compile Include="Assets\Scripts\player detectors\LiftUpDetection.cs" />
