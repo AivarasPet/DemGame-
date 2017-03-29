@@ -7,8 +7,9 @@ public class barrel : MonoBehaviour {
     // Use this for initialization
 
     public int CoinDrop;
+    private float fadeColor=1;
     private Animator anim;
-    public bool galimaKirst, Broken = false;
+    private bool galimaKirst, Broken, fade;
     public GameObject prefab;
     GameObject player;
 
@@ -19,18 +20,28 @@ public class barrel : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        
-	if(galimaKirst)
+
+        if (galimaKirst)
         {
             if (Input.GetKeyDown(KeyCode.Mouse0) && check())
             {
                 Broken = true;
                 galimaKirst = false;
+                gameObject.GetComponent<AudioSource>().Play();
                 Destroy(gameObject.GetComponent<Collider2D>());
-                for (int i = 0; i < CoinDrop; i++) Instantiate(prefab, new Vector3(transform.position.x-2f + i*2.0f, transform.position.y+5, 0), Quaternion.identity);
-                } 
+                fade = true;
+                anim.SetBool("Broken", Broken);
+
+                for (int i = 0; i < CoinDrop; i++) Instantiate(prefab, new Vector3(transform.position.x - 2f + i * 2.0f, transform.position.y + 5, 0), Quaternion.identity);
+            }
         }
-        anim.SetBool("Broken", Broken);
+        else if (fade && gameObject.GetComponent<AudioSource>().isPlaying == false)
+            {
+            gameObject.GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, fadeColor);
+            fadeColor -= 0.015f;
+            if (fadeColor <= 0) Destroy(gameObject);
+            }
+        
         
     }
 

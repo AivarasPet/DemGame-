@@ -28,8 +28,8 @@ public partial class  GrappHook  {
         }
     }
 
-    private int supimosiPuse = 0,  oldSupimosiPuse, loopCounterMin = 10, loopCounterAdd = 10, minusMomentine = 100, minusminusMomentine = 10;
-    private float SwingTimer = 1.5f, loopCounter = 10, swingPower = 3000f, sulaikimoTimer, atvirkstine = 3000f, loopCounterMax = 42, maxJega = 4000f, kiekAddintLoop = 4, kiekPridetJegos = 100;
+    private int supimosiPuse = 0,  oldSupimosiPuse, loopCounterMin = 10, minusMomentine = 100, minusminusMomentine = 10;
+    private float SwingTimer = 1.5f, loopCounter = 10, swingPower = 3000f, sulaikimoTimer, atvirkstine = 3000f, loopCounterMax = 42, maxJega = 4000f, kiekAddintLoop = 4, kiekPridetJegos = 100, loopCounterAdd = 10;
     public float momentine = 3000f;
     void HandleSwing() //supimasis
     { 
@@ -55,7 +55,7 @@ public partial class  GrappHook  {
         {
             if (loopCounter <= loopCounterMax)
             {
-                if (loopCounterAdd < loopCounterMax) loopCounterAdd += 4; if (momentine <= maxJega) { momentine += kiekPridetJegos; }
+                if (loopCounterAdd < loopCounterMax) loopCounterAdd += kiekAddintLoop; if (momentine <= maxJega) { momentine += kiekPridetJegos; }
             }
             loopCounter = loopCounterAdd;
         }
@@ -72,8 +72,9 @@ public partial class  GrappHook  {
         // distance - x
         loopCounterMax = (hook.distance*50) / 23;
         maxJega = Mathf.Clamp((hook.distance * 4000) / 23, 0, 20000f);
-        kiekAddintLoop = (100 * 5) / hook.distance; //+=4 ant 23 distance
-        if (hook.distance > 30f) kiekAddintLoop = 1.5f * kiekAddintLoop; 
+        kiekAddintLoop = Mathf.Clamp((hook.distance * 4) / 23, 4f, 50f);
+        //kiekAddintLoop = (100 * 5) / hook.distance; //+=4 ant 23 distance
+        //if (hook.distance > 30f) kiekAddintLoop = 1.5f * kiekAddintLoop; 
         kiekPridetJegos = Mathf.Clamp((hook.distance * 100) / 23, 0, 50);
        
     }
