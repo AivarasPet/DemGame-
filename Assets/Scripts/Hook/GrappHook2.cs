@@ -28,27 +28,41 @@ public partial class  GrappHook  {
         }
     }
 
-    private int supimosiPuse = 0,  oldSupimosiPuse, loopCounterMin = 10, minusMomentine = 100, minusminusMomentine = 10;
-    private float SwingTimer = 1.5f, loopCounter = 10, swingPower = 3000f, sulaikimoTimer, atvirkstine = 3000f, loopCounterMax = 42, maxJega = 4000f, kiekAddintLoop = 4, kiekPridetJegos = 100, loopCounterAdd = 10;
-    public float momentine = 3000f;
+    private int supimosiPuse = 0,  oldSupimosiPuse, loopCounterMin = 13, minusMomentine = 100, minusminusMomentine = 10, kasKiekLoopuTikrint=5;
+    private float SwingTimer = 1.5f, loopCounter = 13, swingPower = 3500f, sulaikimoTimer, atvirkstine = 3500f, loopCounterMax = 42, maxJega = 4200f, kiekAddintLoop = 4, kiekPridetJegos = 100, loopCounterAdd = 10;
+    public float momentine = 3500f, AuksciausiasTaskasKairejPusej, AuksciausiasTaskasDesinejPusej, KasKelintasAukstis, KasKelintasTolis;
+    public bool stabdytOre;
     void HandleSwing() //supimasis
     { 
-
         loopCounter--;
         //Debug.Log(loopCounter);
+        if(!stabdytOre) kasKiekLoopuTikrint--;
+        if(kasKiekLoopuTikrint==0 && !stabdytOre)
+        {
+            if (Mathf.Abs(KasKelintasAukstis - player.transform.position.y) < 1.5f && Mathf.Abs(KasKelintasTolis - player.transform.position.x) < 1.5f) stabdytOre = true;
+            KasKelintasAukstis = player.transform.position.y;
+            KasKelintasTolis = player.transform.position.x;
+            //Debug.Log(KasKelintasAukstis);
+            kasKiekLoopuTikrint = 5;
+        }
+
         if (Input.GetKey(KeyCode.A))
         {          
             supimosiPuse = -1;
-            if (loopCounter >= 1 && player.transform.position.y + 10 < transform.position.y) { atvirkstine = momentine; playerPhysics.AddForce(transform.right * (-momentine)); player.transform.localScale = new Vector3(-1, 1, 1); }
-            else { if (atvirkstine > 2500) { atvirkstine -= minusminusMomentine; if (minusminusMomentine <= minusMomentine) minusminusMomentine += 5;
-                   playerPhysics.AddForce(transform.right * (-atvirkstine)); player.transform.localScale = new Vector3(-1, 1, 1); } }       
+            getHighestPoint(-1); 
+            if (loopCounter >= 1 && player.transform.position.y + 10 < transform.position.y && !stabdytOre) { atvirkstine = momentine; //jei yra loopu ir playeris zemiau negu limitas
+                playerPhysics.AddForce(transform.right * (-momentine)); player.transform.localScale = new Vector3(-1, 1, 1); } //jega ir puse
+          // else { if (atvirkstine > 2500) { atvirkstine -= minusminusMomentine; if (minusminusMomentine <= minusMomentine) minusminusMomentine += 5; 
+               //   playerPhysics.AddForce(transform.right * (-atvirkstine)); player.transform.localScale = new Vector3(-1, 1, 1); } }       
         }
         else if (Input.GetKey(KeyCode.D))
         {
             supimosiPuse = 1;
-            if (loopCounter >= 1 && player.transform.position.y + 10 < transform.position.y) { atvirkstine = momentine;
-                playerPhysics.AddForce(transform.right * momentine); player.transform.localScale = new Vector3(1, 1, 1); }
-            else { if (atvirkstine > 2500) { atvirkstine -= minusminusMomentine; if (minusminusMomentine <= minusMomentine) minusminusMomentine += 5; playerPhysics.AddForce(transform.right *atvirkstine); player.transform.localScale = new Vector3(1, 1, 1); } }
+            getHighestPoint(1);
+            if (loopCounter >= 1 && player.transform.position.y + 10 < transform.position.y && !stabdytOre) { atvirkstine = momentine; //jei yra loopu ir playeris zemiau negu limitas
+                playerPhysics.AddForce(transform.right * momentine); player.transform.localScale = new Vector3(1, 1, 1); } //jega ir puse
+            //else { if (atvirkstine > 2500) { atvirkstine -= minusminusMomentine; if (minusminusMomentine <= minusMomentine) minusminusMomentine += 5;
+                //    playerPhysics.AddForce(transform.right *atvirkstine); player.transform.localScale = new Vector3(1, 1, 1); } } 
         }
 
         if (supimosiPuse != oldSupimosiPuse)
@@ -56,6 +70,7 @@ public partial class  GrappHook  {
             if (loopCounter <= loopCounterMax)
             {
                 if (loopCounterAdd < loopCounterMax) loopCounterAdd += kiekAddintLoop; if (momentine <= maxJega) { momentine += kiekPridetJegos; }
+                stabdytOre = false;
             }
             loopCounter = loopCounterAdd;
         }

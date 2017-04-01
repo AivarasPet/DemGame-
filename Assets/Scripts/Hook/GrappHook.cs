@@ -55,7 +55,7 @@ public partial class GrappHook : MonoBehaviour
             line.SetPosition(1, new Vector2(linijosPradzia.position.x, linijosPradzia.position.y));
         }
 
-        getHighestPoint();
+  
     }
 
     void FixedUpdate()
