@@ -96,6 +96,8 @@ public partial class GrappHook : MonoBehaviour
             oldPosX = player.transform.position.x; oldPosY = player.transform.position.y;
             loopCounter = loopCounterMax;
             RastKampa();
+            loopCounter = loopCounterMax*2f;
+            stabdytOre = false;
         }
     }
 

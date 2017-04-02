@@ -49,6 +49,7 @@ public partial class GrappHook {
             transform.rotation = rotation; //transform.rotation = rotation;
             rb2d.velocity = trajectory * speed;
             isShot = true;
+            playerPhysics.gravityScale = 50;
             timer = delay;          
         }
     }
