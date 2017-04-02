@@ -24,7 +24,11 @@ public class PlayerAttack : MonoBehaviour {
                 audio.Play();
             }
         }
-        if (timer > 0) timer -= Time.deltaTime;
+        if (timer > 0)
+        {
+            timer -= Time.deltaTime;
+        }
+
 	}
 
     void OnTriggerEnter2D(Collider2D col)

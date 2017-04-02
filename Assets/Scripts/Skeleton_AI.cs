@@ -5,7 +5,8 @@ using System.Collections;
 public class Skeleton_AI : MonoBehaviour
 {
     private Rigidbody2D larry;
-    private bool allowTimer, allowChase = true;
+    private Animator anim;
+    private bool allowTimer, allowChase = true, walk, swing;
     private float detTimer = 0.2f, AfterKnockTimer=0.35f;
     private int health = 100;
     public float speed,  jumpheight, KnockDuration, KnockPower, maxSpeed,  DoSmthTimer, timer, dirTimer, followTimer=5f;
@@ -19,6 +20,7 @@ public class Skeleton_AI : MonoBehaviour
     void Start()
     {
         larry = gameObject.GetComponent<Rigidbody2D>();
+        anim = gameObject.GetComponent<Animator>();
         timer = DoSmthTimer;
         dirTimer = DoSmthTimer * 2;
         mode = "idle";
@@ -49,6 +51,16 @@ public class Skeleton_AI : MonoBehaviour
         if (mode == "idle") idle();
         else if (mode == "aggressive") goAfter();
         else if (mode == "fight") attack();
+
+        //ANIMATOR
+        anim.SetBool("Attacking", swing);
+        anim.SetBool("Walking", walk);
+        if (larry.velocity.x > 0 || larry.velocity.x < 0)
+        {
+            walk = true;
+        }
+        else walk = false;
+        
     }
 
    
@@ -77,12 +89,12 @@ public class Skeleton_AI : MonoBehaviour
         {
             if (direction)
             {
-                gameObject.transform.localScale = new Vector3(1, 1, 1);
+                gameObject.transform.localScale = new Vector3(2, 2, 2);
                 larry.AddForce(transform.right * (-speed));
             }
             else
             {
-                gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                gameObject.transform.localScale = new Vector3(-2, 2, 2);
                 larry.AddForce(transform.right * speed);
             }
 
@@ -105,28 +117,33 @@ public class Skeleton_AI : MonoBehaviour
         {
             if (player.position.x - transform.position.x > 1f && allowChase==true)
             {
-                gameObject.transform.localScale = new Vector3(-1, 1, 1);
+                gameObject.transform.localScale = new Vector3(-2, 2, 2);
                 larry.AddForce(transform.right * speed);
         }}
         else
         {
             if ((transform.position.x  - player.position.x > 1f) && allowChase == true)
             {
-                gameObject.transform.localScale = new Vector3(1, 1, 1);
+                gameObject.transform.localScale = new Vector3(2 , 2, 2);
                 larry.AddForce(transform.right * (-speed));
             }}
-        if (!dScript.iSeeIt)  allowTimer = true; 
-        if(allowTimer)
+        if (!dScript.iSeeIt)  allowTimer = true;
+        if (allowTimer)
         {
             followTimer -= Time.deltaTime;
-            if(followTimer<=0)
+            if (followTimer <= 0)
             {
-                    followTimer = 5f;
-                    mode = "idle";
-                    allowTimer = false;
+                followTimer = 5f;
+                mode = "idle";
+                allowTimer = false;
             }
         }
-        else if (attackScript.iSeeIt) mode = "fight";
+        else if (attackScript.iSeeIt)
+        {
+            mode = "fight";
+            swing = true;
+        }
+        else swing = false;
     }
 
     void attack()

@@ -56,6 +56,10 @@ public partial class Movement {
             if (player_speed == 0) isrunning = false;
         }
 
+        //Attacking
+        if (Input.GetKey(KeyCode.Mouse0)) attack = true;
+        else attack = false;
+
         //Loading Menu
         if (Input.GetKeyDown(KeyCode.Escape)) Application.LoadLevel("MenuInGame");
 

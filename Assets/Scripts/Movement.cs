@@ -5,7 +5,7 @@ public partial class Movement : MonoBehaviour
 {
     public float speed, health = 5, player_speed, acceleration = 400, speed_y,  WJTime, pullDownStrenght, liftupSpeed = 1700, maxYSpeed;
     private bool iswalking, drifting, boi, ground_anim, landing, Falling = true, leftshift, swap, isrunning, forWjump, walled, walled2, facingRight, oldPosition, alreadyTouchedDaWall, idle_anim;
-    public bool canWJump = true, canDoubleJ, FDamage, overrideA = true, overrideD = true, graplinghook;
+    public bool canWJump = true, canDoubleJ, FDamage, overrideA = true, overrideD = true, graplinghook, attack;
     private int maxSpeed = 4, loopCounter, idletimer = 3, drifttimer = 50, swaptimer = 5;
     public int jumpheight;
     private float time_then, wallJtime, FirstCoordinates, SecondCoordinates, driftspeed=500f    ;
@@ -14,7 +14,7 @@ public partial class Movement : MonoBehaviour
     
     private Animator anim;
     private Rigidbody2D dude;
-    GameObject wdetecdtor, GroundDetector, wdetector2, LiftUpDetector, LandingDetector;
+    GameObject wdetecdtor, GroundDetector, wdetector2, LiftUpDetector, LandingDetector, PlayerAttack;
     WallDetection fScript;
     WallDetection2 fScript2;
     GroundDetection gScript;
@@ -52,6 +52,7 @@ public partial class Movement : MonoBehaviour
         anim.SetBool("LShift", leftshift);
         anim.SetBool("IsRunning", isrunning);
         anim.SetFloat("Player_speed", player_speed);
+        anim.SetBool("Attack", attack);
         // anim.SetBool("Sticky", sticky);
 
         ground_anim = gScript.ground;
