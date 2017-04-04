@@ -34,9 +34,11 @@ public partial class GrappHook : MonoBehaviour
         playerPhysics = player.GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+
+    int a = 3, b = 5, c=6, d=7;
     void Update()
     {
+
         if (timer <= 0) { if (Input.GetKeyDown(KeyCode.Mouse1)) mouseClick(); }      
         else timer -= Time.deltaTime;
 
@@ -77,12 +79,11 @@ public partial class GrappHook : MonoBehaviour
     {
         if (col.gameObject.tag == "ground" || col.gameObject.tag == "softGround")
         {
-            Destroy(gameObject.GetComponent<Rigidbody2D>());
-           // hook.enabled = true;
+            Destroy(gameObject.GetComponent<Rigidbody2D>());    
             hook.connectedAnchor = gameObject.transform.position;
-            mScript.graplinghook = true;
+            mScript.graplinghook = true; //animacijai
             spring.connectedAnchor = gameObject.transform.position; spring.enabled = true; springOff = false; pasiHookino = true ;  //0.1 tamping 2.5 frequency       
-           // isHooked = true;
+           // hook.enabled = true; isHooked = true; cia kai spring idejau uzdejau comentara
             pasikeiteDistance(); // normaliam supimuisi
             playerPhysics.gravityScale = 150; 
             float distance = Vector2.Distance(gameObject.transform.position, location.transform.position); 
@@ -91,12 +92,8 @@ public partial class GrappHook : MonoBehaviour
             Quaternion goodOne = transform.rotation; //kad galetu normaliai suptis ant hooko
             transform.rotation = Quaternion.Euler(0, 0, 0);
             GameObject.Find("hookLook").transform.rotation = goodOne; // end
-            loopCounter = loopCounterMax*2/3;
-            momentine = swingPower;
-            oldPosX = player.transform.position.x; oldPosY = player.transform.position.y;
-            loopCounter = loopCounterMax;
-            RastKampa();
-            loopCounter = loopCounterMax*2f;
+            oldPosX = player.transform.position.x; oldPosY = player.transform.position.y;                    
+            loopCounter = loopCounterMax*2f; if(gScript.ground)momentine = swingPower;
             stabdytOre = false;
         }
     }

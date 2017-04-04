@@ -29,22 +29,24 @@ public partial class  GrappHook  {
         }
     }
 
-    private int supimosiPuse = 0,  oldSupimosiPuse, loopCounterMin = 13, minusMomentine = 100, minusminusMomentine = 10, kasKiekLoopuTikrint=3;
+    private int supimosiPuse = 0,  oldSupimosiPuse, loopCounterMin = 13, minusMomentine = 100, minusminusMomentine = 10, kasKiekLoopuTikrint=4;
     private float SwingTimer = 1.5f, swingPower = 3500f, sulaikimoTimer, atvirkstine = 3500f, loopCounterMax = 42, maxJega = 4200f, kiekAddintLoop = 4, kiekPridetJegos = 100, loopCounterAdd = 10;
     public float momentine = 3500f, loopCounter = 13, AuksciausiasTaskasKairejPusej, AuksciausiasTaskasDesinejPusej, KasKelintasAukstis, KasKelintasTolis;
     public bool stabdytOre;
+
     void HandleSwing() //supimasis
     { 
         loopCounter--;
-        //Debug.Log(loopCounter);
+
         if(!stabdytOre) kasKiekLoopuTikrint--;
-        if(kasKiekLoopuTikrint==0 && !stabdytOre)
-        {
-            if (Mathf.Abs(KasKelintasAukstis - player.transform.position.y) < 2.5f && Mathf.Abs(KasKelintasTolis - player.transform.position.x) < 2.5f && transform.position.y-player.transform.position.y<20f) { stabdytOre = true;}
-            KasKelintasAukstis = player.transform.position.y;
-            KasKelintasTolis = player.transform.position.x;
-            //Debug.Log(KasKelintasAukstis);
-            kasKiekLoopuTikrint = 3;
+        if (kasKiekLoopuTikrint == 0 && !stabdytOre)
+        {     
+                if (Mathf.Abs(KasKelintasAukstis - player.transform.position.y) < 2.2f && Mathf.Abs(KasKelintasTolis - player.transform.position.x) < 2.2f) {
+                stabdytOre = true; Debug.Log("shit");  } 
+                KasKelintasAukstis = player.transform.position.y;
+                KasKelintasTolis = player.transform.position.x;
+                //Debug.Log(KasKelintasAukstis);
+                kasKiekLoopuTikrint = 4;           
         }
        //if (supimosiPuse == 1 && player.transform.position.x < location.transform.position.x || supimosiPuse == -1 && player.transform.position.x > location.transform.position.x) stabdytOre = false;
 
@@ -76,6 +78,7 @@ public partial class  GrappHook  {
             }
             loopCounter = loopCounterAdd;
             stabdytOre = false;
+            kasKiekLoopuTikrint = 7;
         }
         oldSupimosiPuse = supimosiPuse;
 
@@ -84,17 +87,16 @@ public partial class  GrappHook  {
 
     void pasikeiteDistance()
     {
-        //23 distance idealus; 42 loopCounterMax 
-        // 23 distance; 4000f maxjega;
-        // 23 - 4000 
-        // distance - x
+        //23 distance idealus; 4500f maxjega
+        //100 6000f
+        // 60 distance 6000f visai px  
+        
+
         loopCounterMax = (hook.distance*50) / 23;
-        maxJega = Mathf.Clamp((hook.distance * 4000) / 23, 0, 5300f);
+        maxJega = Mathf.Clamp((hook.distance * 6000) / 60, swingPower, 6000f);
         kiekAddintLoop = Mathf.Clamp((hook.distance * 4) / 23, 4f, 50f);
-        //kiekAddintLoop = (100 * 5) / hook.distance; //+=4 ant 23 distance
-        //if (hook.distance > 30f) kiekAddintLoop = 1.5f * kiekAddintLoop; 
-        kiekPridetJegos = Mathf.Clamp((hook.distance * 100) / 23, 0, 50);
-       
+        kiekPridetJegos = Mathf.Clamp((hook.distance * 100) / 23, 0, 100f);
+        if (momentine > maxJega) momentine = maxJega;
     }
 
     private int loopuSk = 8, loopuSkAtm=10;
@@ -109,19 +111,13 @@ public partial class  GrappHook  {
             if (Mathf.Abs(oldPosX - player.transform.position.x) < 4f && Mathf.Abs(oldPosY-player.transform.position.y) < 4f) //jei nebejuda
             {
                 arGalimaJudetOre = false;
-             //   Debug.Log("galima");
+   
                 loopuSkAtm = loopuSk;
             }
-            //else Debug.Log("negalima");
+
             oldPosX = player.transform.position.x;
             oldPosY = player.transform.position.y;
         }
-    }
-
-    void RastKampa()
-    {
-        float kampas = 90-(Mathf.Asin( (location.transform.position.y-player.transform.position.y)/hook.distance) * 100) ;
-        Debug.Log(kampas);
     }
 
 }

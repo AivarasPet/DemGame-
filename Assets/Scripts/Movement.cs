@@ -101,8 +101,8 @@ public partial class Movement : MonoBehaviour
         
         if (dude.velocity.y < -maxYSpeed - 10) dude.velocity = new Vector2(dude.velocity.x, -maxYSpeed);
 
-
-    }
+       
+    } // end
 
     //WALKING
     void walking()
