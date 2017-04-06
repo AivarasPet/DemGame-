@@ -25,12 +25,12 @@ public class portal : MonoBehaviour {
 
             if (!once)
             {
-                effect.bloomThreshold -= 0.2f;
+                effect.bloomThreshold -= 0.25f;
                 effect.bloomBlurIterations = 0;
             }
             else
             {
-                effect.bloomThreshold += 0.2f;
+                effect.bloomThreshold += 0.25f;
                 effect.bloomBlurIterations = 4;
             }
             if(timerAtm <= 0 && !once)
@@ -52,10 +52,11 @@ public class portal : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D col)
     {
-
-        audio.Play();
-        rodyti = true;
-        
+        if (col.gameObject.tag == "Player")
+        {
+            audio.Play();
+            rodyti = true;
+        }
     }
 
 

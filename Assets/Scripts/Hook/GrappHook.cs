@@ -14,7 +14,7 @@ public partial class GrappHook : MonoBehaviour
     Movement mScript;      
     Vector2 target;
     public Transform linijosPradzia;
-    public bool isHooked, isShot, pasiHookino, graplinghook;
+    public bool isHooked, isShot, pasiHookino, graplinghook, linijaOn;
 
     // Use this for initialization
     void Start()
@@ -35,26 +35,26 @@ public partial class GrappHook : MonoBehaviour
     }
 
 
-    int a = 3, b = 5, c=6, d=7;
+
     void Update()
     {
 
         if (timer <= 0) { if (Input.GetKeyDown(KeyCode.Mouse1)) mouseClick(); }      
         else timer -= Time.deltaTime;
 
-        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Q)) unHook();
 
 
-        if (isShot) checkIfTouches();
+        if (isShot) checkIfTouches(); //cool
 
-        if (pasiHookino) HookoPerjunginejimas();
-        
+        if (pasiHookino) HookoPerjunginejimas(); //cool
 
-        if (GameObject.Find("hookLook").GetComponent<SpriteRenderer>().enabled)
-        {  //linijos grafikai
+
+        if (linijaOn) { 
+            //linijos grafikai
             line.enabled = true;
             line.SetPosition(0, transform.position);
             line.SetPosition(1, new Vector2(linijosPradzia.position.x, linijosPradzia.position.y));
+        if (Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Q)) unHook();
         }
 
   
@@ -62,7 +62,7 @@ public partial class GrappHook : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (GameObject.Find("hookLook").GetComponent<SpriteRenderer>().enabled) //kai ijungta textura
+        if (linijaOn) //kai ijungta textura
         {
             if (Input.GetKey(KeyCode.W) && isHooked) aukstyn(true);          
             else if (Input.GetKey(KeyCode.S) && !gScript.ground) aukstyn(false);
@@ -88,12 +88,11 @@ public partial class GrappHook : MonoBehaviour
             playerPhysics.gravityScale = 150; 
             float distance = Vector2.Distance(gameObject.transform.position, location.transform.position); 
             spring.distance = distance;       
-            isShot = false; //pataike, tai ijungia ifa update
+            isShot = false; //pataike, tai isjungia ifa update
             Quaternion goodOne = transform.rotation; //kad galetu normaliai suptis ant hooko
             transform.rotation = Quaternion.Euler(0, 0, 0);
-            GameObject.Find("hookLook").transform.rotation = goodOne; // end
-            oldPosX = player.transform.position.x; oldPosY = player.transform.position.y;                    
-            loopCounter = loopCounterMax*2f; if(gScript.ground)momentine = swingPower;
+            GameObject.Find("hookLook").transform.rotation = goodOne; // end                 
+            loopCounter = loopCounterMax*2f; if (gScript.ground) momentine = swingPower; else if(momentine < maxJega)momentine += kiekPridetJegos; 
             stabdytOre = false;
         }
     }
@@ -101,6 +100,7 @@ public partial class GrappHook : MonoBehaviour
 
     public float springTimer = 1.2f, springTimerAtm = 1.2f;
     bool springOff = true, atsijungiaHooks = false;
+
     void HookoPerjunginejimas()
     {
         // ar sptinginas ar normaliai

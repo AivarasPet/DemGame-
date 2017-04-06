@@ -15,6 +15,7 @@ public partial class GrappHook {
             springTimerAtm = springTimer;
             mScript.graplinghook = false;
             GameObject.Find("hookLook").GetComponent<SpriteRenderer>().enabled = false;
+            linijaOn = false;
             playerPhysics.gravityScale = 50;
         }
     }
@@ -24,10 +25,11 @@ public partial class GrappHook {
         float distance = Vector2.Distance(new Vector2(gameObject.transform.position.x, gameObject.transform.position.y), new Vector2(player.transform.position.x, player.transform.position.y));
         if (distance > 100 || distance < -100)
         {
-            GameObject.Find("hookLook").GetComponent<SpriteRenderer>().enabled = false;
+            linijaOn = false;
             line.enabled = false;
             hook.enabled = false;
             isShot = false;
+            GameObject.Find("hookLook").GetComponent<SpriteRenderer>().enabled = false;
             Destroy(gameObject.GetComponentInChildren<Rigidbody2D>());
         }
     }
@@ -35,10 +37,10 @@ public partial class GrappHook {
     void mouseClick()
     {
         {   // suranda peles koord., atema is ju zaidejo vieta ir taip suranda sovimo trajektorija.
+            linijaOn = true;
             GameObject.Find("hookLook").GetComponent<SpriteRenderer>().enabled = true;
             try { gameObject.AddComponent<Rigidbody2D>(); } catch { };
-            hook.enabled = false;
-            isHooked = false;
+            hook.enabled = false; isHooked = false; isShot = true;
             rb2d = gameObject.GetComponent<Rigidbody2D>();
             Transform tr = location.transform;
             gameObject.transform.position = tr.position;
@@ -47,26 +49,24 @@ public partial class GrappHook {
             trajectory.Normalize();
             Quaternion rotation = Quaternion.Euler(0, 0, Mathf.Atan2(trajectory.y, trajectory.x) * Mathf.Rad2Deg + 270);
             transform.rotation = rotation; //transform.rotation = rotation;
-            rb2d.velocity = trajectory * speed;
-            isShot = true;
+            rb2d.velocity = trajectory * speed;            
             playerPhysics.gravityScale = 50;
             timer = delay;          
         }
     }
 
-    void aukstyn(bool a)
+    void aukstyn(bool upDown)
     {
         springOff = true;
-        if (a)
+        if (upDown)
         {
             hook.enabled = true;
             hook.distance = Vector2.Distance(gameObject.transform.position, location.transform.position);
-            if (hook.distance > 1) hook.distance = hook.distance - 1f;
+            if (hook.distance > 5) hook.distance = hook.distance - 1f;
             pasikeiteDistance();
         }
         else
         {                
-           float gap = gameObject.transform.position.y - location.transform.position.y;
             if (hook.distance < 100 && (player.transform.position.y < gameObject.transform.position.y)) hook.distance = hook.distance + 1f;
            pasikeiteDistance();
        }
