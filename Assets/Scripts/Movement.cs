@@ -3,15 +3,15 @@ using System.Collections;
 
 public partial class Movement : MonoBehaviour
 {
-    public float speed, health = 5, player_speed, acceleration = 400, speed_y,  WJTime, pullDownStrenght, liftupSpeed = 1700, maxYSpeed;
-    private bool iswalking, drifting, boi, ground_anim, landing, Falling = true, leftshift, swap, isrunning, forWjump, walled, walled2, facingRight, oldPosition, alreadyTouchedDaWall, idle_anim;
-    public bool canWJump = true, canDoubleJ, FDamage, overrideA = true, overrideD = true, graplinghook, attack;
+    public float speed, health = 5, player_speed, acceleration = 400, speed_y, WJTime, pullDownStrenght, liftupSpeed = 1700, maxYSpeed;
+    private bool iswalking, drifting, boi, ground_anim, landing, Falling = false, leftshift, swap, isrunning, forWjump, walled, walled2, facingRight, oldPosition, alreadyTouchedDaWall, idle_anim;
+    public bool canWJump = true, canDoubleJ, dead, FDamage, overrideA = true, overrideD = true, graplinghook, attack;
     private int maxSpeed = 4, loopCounter, idletimer = 3, drifttimer = 50, swaptimer = 5;
     public int jumpheight;
-    private float time_then, wallJtime, FirstCoordinates, SecondCoordinates, driftspeed=500f    ;
+    private float time_then, wallJtime, FirstCoordinates, SecondCoordinates, driftspeed = 500f;
     public float jdelay = 1, defSpeed, FallDamage;
     private string wallTag;
-    
+
     private Animator anim;
     private Rigidbody2D dude;
     GameObject wdetecdtor, GroundDetector, wdetector2, LiftUpDetector, LandingDetector, PlayerAttack;
@@ -22,7 +22,7 @@ public partial class Movement : MonoBehaviour
     LandingDetection landingScript;
     void Start()
     {
-        
+
         wdetecdtor = GameObject.Find("WallDetector");
         wdetector2 = GameObject.Find("WallDetector2");
         GroundDetector = GameObject.Find("GroundDetector");
@@ -35,7 +35,7 @@ public partial class Movement : MonoBehaviour
         landingScript = LandingDetector.GetComponent<LandingDetection>();
         dude = gameObject.GetComponent<Rigidbody2D>();
         anim = gameObject.GetComponent<Animator>();
-        
+
     }
 
     void Update()
@@ -51,6 +51,7 @@ public partial class Movement : MonoBehaviour
         anim.SetBool("Drifting Swap", swap);
         anim.SetBool("LShift", leftshift);
         anim.SetBool("IsRunning", isrunning);
+        anim.SetBool("Dead", dead);
         anim.SetFloat("Player_speed", player_speed);
         anim.SetBool("Attack", attack);
         // anim.SetBool("Sticky", sticky);
@@ -97,11 +98,11 @@ public partial class Movement : MonoBehaviour
             }
             else if (walled) walljump();
         }
-                
-        
+
+
         if (dude.velocity.y < -maxYSpeed - 10) dude.velocity = new Vector2(dude.velocity.x, -maxYSpeed);
 
-       
+
     } // end
 
     //WALKING
@@ -126,7 +127,7 @@ public partial class Movement : MonoBehaviour
         }
     }
 
-        void walljump()
+    void walljump()
     {
         if (wallTag == "softGround")
         {
@@ -184,7 +185,8 @@ public partial class Movement : MonoBehaviour
                     dude.velocity = new Vector2(dude.velocity.x, -80f);
                 }
                 else speed = defSpeed;
-            } }
+            }
+        }
     }
 
     //ACCELERATION
@@ -197,28 +199,40 @@ public partial class Movement : MonoBehaviour
         }
     }
 
-        //FALL DAMAGE
-        void  fallDamage()
+    //FALL DAMAGE
+   
+    void fallDamage()
     {
-        if (speed_y <= -79 && Falling == true)
+        if (speed_y < -10 && Falling == false)
         {
             FirstCoordinates = transform.position.y;
-            Falling = false;
+            Falling = true;
         }
-        if (gScript.ground == true && Falling == false)
+        if (speed_y >= 0 && Falling == true)
+        {
+            Falling = false;
+            FirstCoordinates = SecondCoordinates;
+        }
+        if (gScript.ground == true && Falling == true)
         {
             SecondCoordinates = transform.position.y;
-            FallDamage = 2 * ((FirstCoordinates - SecondCoordinates) - 50);
-            Falling = true;
+            FallDamage = (FirstCoordinates - SecondCoordinates);
+            Debug.Log(FallDamage);
+            //if (FallDamage > 0) FallDamage = FallDamage * -1;
+            Falling = false;
             boi = true;
         }
-
-        if (FallDamage >= 2 && boi == true)
+        
+        if (FallDamage >= 40 && boi == true)
         {
             FDamage = true;
             boi = false;
         }
+        if (gameObject.tag == "Finish") dead = true;
+        
     }
+
+    //LIFTUP
     void liftUp()
     {
         if (lScript.liftup && !walled2)

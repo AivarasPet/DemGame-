@@ -4,7 +4,7 @@ using System.Collections;
 public class Health : MonoBehaviour
 {
 
-    public float MaxHealth = 200f;
+    public float MaxHealth = 100f;
     public float CurrentHealth;
     public float HealthLeft;
     public GameObject Bar;
@@ -22,18 +22,19 @@ public class Health : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(HealthLeft);
        if (mscript.FDamage == true)
-        {
+        {   if (mscript.FallDamage < 0) mscript.FallDamage = mscript.FallDamage * -1;
             CurrentHealth = CurrentHealth - mscript.FallDamage;
-            HealthLeft = CurrentHealth / MaxHealth;
+            HealthLeft = MaxHealth -(MaxHealth - CurrentHealth);
             HealthBarDepletion(HealthLeft);
             mscript.FDamage = false;
         }
     }
 
-    public void HealthBarDepletion(float PlayerHealth)
+    public void HealthBarDepletion(float HealthLeft)
     {
-        Bar.transform.localScale = new Vector3(PlayerHealth, Bar.transform.localScale.y, Bar.transform.localScale.z);
+        Bar.transform.localScale = new Vector3(Bar.transform.localScale.x - HealthLeft, Bar.transform.localScale.y, Bar.transform.localScale.z);
         if(CurrentHealth <= 0)
         {
             GameObject.Find("HealthBar").GetComponent<playerDeath>().enabled = true;

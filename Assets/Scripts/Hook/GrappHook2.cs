@@ -39,7 +39,7 @@ public partial class  GrappHook  {
         if(!stabdytOre) kasKiekLoopuTikrint--;
         if (kasKiekLoopuTikrint == 0 && !stabdytOre)
         {     
-                if (Mathf.Abs(KasKelintasAukstis - player.transform.position.y) < 1.5f && Mathf.Abs(KasKelintasTolis - player.transform.position.x) < 2.2f && Mathf.Abs(player.transform.position.x - transform.position.x) > 15f)    stabdytOre = true; 
+                if (Mathf.Abs(KasKelintasAukstis - player.transform.position.y) < 1.5f && Mathf.Abs(KasKelintasTolis - player.transform.position.x) < 2.2f && rastKampa(0.75f))    stabdytOre = true; 
                 KasKelintasAukstis = player.transform.position.y;
                 KasKelintasTolis = player.transform.position.x;
                 kasKiekLoopuTikrint = 4;           
@@ -88,9 +88,14 @@ public partial class  GrappHook  {
         kiekPridetJegos = Mathf.Clamp((hook.distance * 100) / 23, 0, 100f);
         if (momentine > maxJega) momentine = maxJega;
     }
+    private bool rastKampa(float limitas)
+    { //padariau kad santykis o ne kampas...
+        float kampas = Mathf.Abs(player.transform.position.x - transform.position.x) / Vector2.Distance(new Vector2(player.transform.position.x, player.transform.position.y), new Vector2(transform.position.x, transform.position.y));
+        if (kampas >= limitas) return true;
+        else return false;
+    }
 
 
 
-  
 
 }
