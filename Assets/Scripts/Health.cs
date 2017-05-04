@@ -22,7 +22,7 @@ public class Health : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(HealthLeft);
+        //Debug.Log(HealthLeft);
        if (mscript.FDamage == true)
         {   if (mscript.FallDamage < 0) mscript.FallDamage = mscript.FallDamage * -1;
             CurrentHealth = CurrentHealth - mscript.FallDamage;

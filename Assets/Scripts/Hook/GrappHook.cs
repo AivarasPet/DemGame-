@@ -9,6 +9,7 @@ public partial class GrappHook : MonoBehaviour
     GameObject location, player, groundDet;
     DistanceJoint2D hook;
     SpringJoint2D spring;
+    HingeJoint2D hinge;
     GroundDetection gScript;
     LineRenderer line;
     Movement mScript;      
@@ -27,6 +28,7 @@ public partial class GrappHook : MonoBehaviour
         groundDet = GameObject.Find("GroundDetector");
         gScript = groundDet.GetComponent<GroundDetection>();
         hook = player.GetComponent<DistanceJoint2D>();
+        hinge = player.GetComponent<HingeJoint2D>();
         spring = player.GetComponent<SpringJoint2D>();
         line = GetComponent<LineRenderer>();
         line.enabled = false;
@@ -46,7 +48,7 @@ public partial class GrappHook : MonoBehaviour
 
         if (isShot) checkIfTouches(); //cool
 
-        if (pasiHookino) HookoPerjunginejimas(); //cool
+        if (pasiHookino) HookoPerjunginejimas(0); //cool
 
 
         if (linijaOn) { 
@@ -75,6 +77,7 @@ public partial class GrappHook : MonoBehaviour
         } // pabaiga judejimo
     }
 
+  
     void OnTriggerEnter2D(Collider2D col) //paliecia pavirsiu
     {
         if (col.gameObject.tag == "ground" || col.gameObject.tag == "softGround")
@@ -84,7 +87,6 @@ public partial class GrappHook : MonoBehaviour
             mScript.graplinghook = true; //animacijai
             spring.connectedAnchor = gameObject.transform.position; spring.enabled = true; springOff = false; pasiHookino = true ;  //0.1 tamping 2.5 frequency       
            // hook.enabled = true; isHooked = true; cia kai spring idejau uzdejau comentara
-            pasikeiteDistance(); // normaliam supimuisi
             playerPhysics.gravityScale = 150; 
             float distance = Vector2.Distance(gameObject.transform.position, location.transform.position); 
             spring.distance = distance;       
@@ -94,26 +96,59 @@ public partial class GrappHook : MonoBehaviour
             GameObject.Find("hookLook").transform.rotation = goodOne; // end                 
             loopCounter = loopCounterMax*2f; if (gScript.ground) momentine = swingPower; else if(momentine < maxJega)momentine += kiekPridetJegos; 
             stabdytOre = false;
+            
         }
     }
 
 
     public float springTimer = 1.2f, springTimerAtm = 1.2f;
-    bool springOff = true, atsijungiaHooks = false;
+    bool springOff = true; 
+    private float perjungimoTimer = 0.1f, perjungimoTimerAtm = 0.1f;
+    private int oldMode=9;
 
-    void HookoPerjunginejimas()
+    void HookoPerjunginejimas(int mode)
     {
         // ar sptinginas ar normaliai
-        if (springTimerAtm >= 0 && springOff==false) springTimerAtm -= Time.deltaTime;                   
-        else 
+        if (springTimerAtm >= 0 && springOff == false) springTimerAtm -= Time.deltaTime;
+        else if (mode != oldMode)
         {
-            hook.distance = Vector2.Distance(gameObject.transform.position, location.transform.position);
-            spring.enabled = false;
-            hook.enabled = true;
-            isHooked = true;
-            pasiHookino = false;
+                if (mode == 0)
+                {
+                    hook.distance = Vector2.Distance(gameObject.transform.position, location.transform.position);
+                    spring.enabled = false;
+                    hook.enabled = true;
+                    isHooked = true;
+                    pasiHookino = false;
+                    pasikeiteDistance();
+                }
+                else if (mode == 1)
+            {
+                hinge.enabled = false;
+                hook.enabled = true;
+                playerPhysics.gravityScale = 150; playerPhysics.mass = 1;
+                playerPhysics.constraints = RigidbodyConstraints2D.FreezeRotation;
+                player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, player.transform.rotation.y, 0);
+                mScript.enabled = true;
+                perjungimoTimerAtm = perjungimoTimer;
+                playerPhysics.drag = 0f;
+            }
+                if (mode == 2)
+            {
+                mScript.enabled = false;
+                playerPhysics.constraints = RigidbodyConstraints2D.None;
+                hook.enabled = false;
+                hinge.connectedAnchor = new Vector2(transform.position.x, transform.position.y);
+                hinge.anchor = new Vector2(transform.transform.position.x, transform.transform.position.y);
+                hinge.enabled = true;
+                playerPhysics.gravityScale = 15; playerPhysics.mass = 0.1f;
+                playerPhysics.drag = 0.15f;
+            }
         }
-        }
+        oldMode = mode;
+    }
+
+
+    
     }
 
 

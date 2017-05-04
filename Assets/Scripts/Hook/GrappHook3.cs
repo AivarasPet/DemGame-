@@ -10,8 +10,17 @@ public partial class GrappHook {
             {
                 player.GetComponent<Rigidbody2D>().velocity = (new Vector2(player.GetComponent<Rigidbody2D>().velocity.x, jumpHeight));
                 mScript.canDoubleJ = false;
-            }                               
-            spring.enabled = false; hook.enabled = false; line.enabled = false;  isHooked = false; pasiHookino = false; //viska atjungia
+            }
+            if (hinge.enabled)
+            {
+                playerPhysics.mass = 1;
+                playerPhysics.constraints = RigidbodyConstraints2D.FreezeRotation;
+                player.transform.rotation = Quaternion.Euler(player.transform.rotation.x, player.transform.rotation.y, 0);
+                mScript.enabled = true;
+                perjungimoTimerAtm = perjungimoTimer;
+                playerPhysics.drag = 0f;
+            }
+            spring.enabled = false; hook.enabled = false; hinge.enabled = false; line.enabled = false;  isHooked = false; pasiHookino = false; //viska atjungia
             springTimerAtm = springTimer;
             mScript.graplinghook = false;
             GameObject.Find("hookLook").GetComponent<SpriteRenderer>().enabled = false;
@@ -52,12 +61,14 @@ public partial class GrappHook {
             rb2d.velocity = trajectory * speed;            
             playerPhysics.gravityScale = 50;
             timer = delay;          
+
         }
     }
 
     void aukstyn(bool upDown)
     {
         springOff = true;
+        HookoPerjunginejimas(1); perjungimoTimerAtm = perjungimoTimer;
         if (upDown)
         {
             hook.enabled = true;
