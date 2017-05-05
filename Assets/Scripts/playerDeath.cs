@@ -29,7 +29,7 @@ public class playerDeath : MonoBehaviour {
             if (a.isPlaying)
             {
                if(camera.orthographicSize > 2) camera.orthographicSize = camera.orthographicSize - 0.1f;
-                cScript.fix = 9;
+                cScript.fix = 2;
                 camera.GetComponent<Grayscale>().enabled = true;
                 try { Destroy(GameObject.Find("Player").GetComponent<Movement>()); }
                 catch { };

@@ -12037,6 +12037,10 @@ Prefab:
       propertyPath: KnockPower
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 11454376, guid: f2f7bd2d4775b924a83bcb5008f1ce17, type: 2}
+      propertyPath: playerKnockPow
+      value: 80
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f2f7bd2d4775b924a83bcb5008f1ce17, type: 2}
   m_IsPrefabParent: 0
@@ -12521,8 +12525,8 @@ Light:
   serializedVersion: 7
   m_Type: 2
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.59
-  m_Range: 1000
+  m_Intensity: 0.88
+  m_Range: 10000
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
@@ -12552,7 +12556,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2023176313}
   m_LocalRotation: {x: 1, y: 0, z: 0, w: -0.00000016292068}
-  m_LocalPosition: {x: -16.023, y: 10.02, z: -12.34}
+  m_LocalPosition: {x: -16.023, y: 10.02, z: -11.76}
   m_LocalScale: {x: 0.31046042, y: 0.31046042, z: 15.523021}
   m_Children: []
   m_Father: {fileID: 450071932}

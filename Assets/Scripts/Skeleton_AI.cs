@@ -8,9 +8,9 @@ public class Skeleton_AI : MonoBehaviour
     private Rigidbody2D larry;
     private Animator anim;
     private bool allowTimer, allowChase = true, walk, swing;
-    private float detTimer = 0.2f, AfterKnockTimer = 0.35f;
+    private float detTimer = 0.2f, AfterKnockTimer=0.35f;
     private int health = 100;
-    public float speed, jumpheight, KnockDuration, KnockPower, maxSpeed, DoSmthTimer, timer, dirTimer, followTimer = 5f;
+    public float speed,  jumpheight, KnockDuration, KnockPower, maxSpeed,  DoSmthTimer, timer, dirTimer, followTimer=5f, waitTimer=0.1f, waitTimerAtm=0.1f, playerKnockPow;
     public string mode;
     public bool canMove, direction;
     public WallDetection wScript, platform;
@@ -30,6 +30,8 @@ public class Skeleton_AI : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (hitTimerAtm > 0) hitTimerAtm -= Time.deltaTime;
+
         if (!allowChase)
         {
             AfterKnockTimer -= Time.deltaTime;
@@ -37,8 +39,7 @@ public class Skeleton_AI : MonoBehaviour
             {
                 AfterKnockTimer = 0.35f;
                 allowChase = true;
-            }
-        }
+            }}
 
         if (larry.velocity.x > maxSpeed)
         {
@@ -61,12 +62,12 @@ public class Skeleton_AI : MonoBehaviour
         {
             walk = true;
         }
-        else walk = false;
-
+        else walk = false; //end animator
+        
     }
 
-
-
+   
+    
 
     void idle()
     {
@@ -112,28 +113,24 @@ public class Skeleton_AI : MonoBehaviour
 
     void goAfter()
     {
-        speed = 900f;
-        if (gScript.ground && wScript.walling && allowChase)
-        {
-            larry.velocity = (new Vector2(larry.velocity.x, jumpheight));
+        speed = 900f;       
+        if(gScript.ground && wScript.walling && allowChase) { larry.velocity = (new Vector2(larry.velocity.x, jumpheight));     
         }
         if (player.position.x > transform.position.x)
         {
-            if (player.position.x - transform.position.x > 1f && allowChase == true)
+            if (player.position.x - transform.position.x > 1f && allowChase==true)
             {
                 gameObject.transform.localScale = new Vector3(-2, 2, 2);
                 larry.AddForce(transform.right * speed);
-            }
-        }
+        }}
         else
         {
-            if ((transform.position.x - player.position.x > 1f) && allowChase == true)
+            if ((transform.position.x  - player.position.x > 1f) && allowChase == true)
             {
-                gameObject.transform.localScale = new Vector3(2, 2, 2);
+                gameObject.transform.localScale = new Vector3(2 , 2, 2);
                 larry.AddForce(transform.right * (-speed));
-            }
-        }
-        if (!dScript.iSeeIt) allowTimer = true;
+            }}
+        if (!dScript.iSeeIt)  allowTimer = true;
         if (allowTimer)
         {
             followTimer -= Time.deltaTime;
@@ -152,13 +149,21 @@ public class Skeleton_AI : MonoBehaviour
         else swing = false;
     }
 
+    private float hitTimer=0.5f, hitTimerAtm=0.5f;
     void attack()
     {
-        if (!attackScript.iSeeIt)
+        if(!attackScript.iSeeIt)
         {
             mode = "aggressive";
         }
-
+        if(hitTimerAtm<=0)
+        {
+            int puse;
+            if (transform.localScale.x == 1) puse = 1;
+            else puse = -1;
+            player.GetComponent<Rigidbody2D>().velocity = new Vector2(puse * 2, 1)*playerKnockPow;
+            hitTimerAtm = hitTimer;
+        }
     }
 
     void Damage(int hitpoints)
@@ -166,21 +171,17 @@ public class Skeleton_AI : MonoBehaviour
         health -= hitpoints;
         Debug.Log(health);
         if (health <= 0) Destroy(gameObject);
-        else KnockBack();
+        else StartCoroutine(KnockBack()); 
     }
 
-    void KnockBack()
+
+    IEnumerator KnockBack()
     {
-        float timeris = 0, z;
+        yield return new WaitForSeconds(0.1f);
+        float timeris=0, z;
         if (player.position.x >= gameObject.transform.position.x) z = -1;
         else z = 1; //puse i kuria skris
         allowChase = false;
-        larry.velocity = new Vector2(z * 2, 1) * KnockPower;
-        //while (timeris <= KnockDuration)
-        //{
-        //    timeris += Time.deltaTime;
-        //    larry.AddForce(new Vector2(2*z, 1)* KnockPower);          
-        //}
-
+        larry.velocity = new Vector2( z*2, 1) * KnockPower;
     }
 }
