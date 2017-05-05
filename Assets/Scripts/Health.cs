@@ -38,6 +38,7 @@ public class Health : MonoBehaviour
         if(CurrentHealth <= 0)
         {
             GameObject.Find("HealthBar").GetComponent<playerDeath>().enabled = true;
+            GameObject.Find("Player").GetComponent<Animator>().SetBool("Dead", true);
         }
     }
 }

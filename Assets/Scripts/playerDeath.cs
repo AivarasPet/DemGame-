@@ -61,6 +61,7 @@ public class playerDeath : MonoBehaviour {
         {
             if (!a.isPlaying)
             {
+                GameObject.Find("Player").GetComponent<Animator>().SetBool("Dead", true);
                 a.enabled = true;
                 a.Play();
                 canZoom = true;

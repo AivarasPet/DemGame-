@@ -31,7 +31,7 @@ public class CameraView : MonoBehaviour
     void LateUpdate()
     {
         size = cam.orthographicSize;
-        transform.position = new Vector3(Mathf.Clamp(target.position.x, xMin, xMax), Mathf.Clamp(target.position.y, yMin, yMax) + fix, -10);
+        transform.position = new Vector3(Mathf.Clamp(target.position.x, xMin, xMax), Mathf.Clamp(target.position.y, yMin, yMax) + fix, -1);
         if (ok >= 0.1f)//up
         {
             if (size > minSize)

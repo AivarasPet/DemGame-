@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Threading;
 
 
 public class Skeleton_AI : MonoBehaviour
@@ -7,9 +8,9 @@ public class Skeleton_AI : MonoBehaviour
     private Rigidbody2D larry;
     private Animator anim;
     private bool allowTimer, allowChase = true, walk, swing;
-    private float detTimer = 0.2f, AfterKnockTimer=0.35f;
+    private float detTimer = 0.2f, AfterKnockTimer = 0.35f;
     private int health = 100;
-    public float speed,  jumpheight, KnockDuration, KnockPower, maxSpeed,  DoSmthTimer, timer, dirTimer, followTimer=5f;
+    public float speed, jumpheight, KnockDuration, KnockPower, maxSpeed, DoSmthTimer, timer, dirTimer, followTimer = 5f;
     public string mode;
     public bool canMove, direction;
     public WallDetection wScript, platform;
@@ -36,7 +37,8 @@ public class Skeleton_AI : MonoBehaviour
             {
                 AfterKnockTimer = 0.35f;
                 allowChase = true;
-            }}
+            }
+        }
 
         if (larry.velocity.x > maxSpeed)
         {
@@ -60,11 +62,11 @@ public class Skeleton_AI : MonoBehaviour
             walk = true;
         }
         else walk = false;
-        
+
     }
 
-   
-    
+
+
 
     void idle()
     {
@@ -110,24 +112,28 @@ public class Skeleton_AI : MonoBehaviour
 
     void goAfter()
     {
-        speed = 900f;       
-        if(gScript.ground && wScript.walling && allowChase) { larry.velocity = (new Vector2(larry.velocity.x, jumpheight));     
+        speed = 900f;
+        if (gScript.ground && wScript.walling && allowChase)
+        {
+            larry.velocity = (new Vector2(larry.velocity.x, jumpheight));
         }
         if (player.position.x > transform.position.x)
         {
-            if (player.position.x - transform.position.x > 1f && allowChase==true)
+            if (player.position.x - transform.position.x > 1f && allowChase == true)
             {
                 gameObject.transform.localScale = new Vector3(-2, 2, 2);
                 larry.AddForce(transform.right * speed);
-        }}
+            }
+        }
         else
         {
-            if ((transform.position.x  - player.position.x > 1f) && allowChase == true)
+            if ((transform.position.x - player.position.x > 1f) && allowChase == true)
             {
-                gameObject.transform.localScale = new Vector3(2 , 2, 2);
+                gameObject.transform.localScale = new Vector3(2, 2, 2);
                 larry.AddForce(transform.right * (-speed));
-            }}
-        if (!dScript.iSeeIt)  allowTimer = true;
+            }
+        }
+        if (!dScript.iSeeIt) allowTimer = true;
         if (allowTimer)
         {
             followTimer -= Time.deltaTime;
@@ -148,7 +154,7 @@ public class Skeleton_AI : MonoBehaviour
 
     void attack()
     {
-        if(!attackScript.iSeeIt)
+        if (!attackScript.iSeeIt)
         {
             mode = "aggressive";
         }
@@ -160,19 +166,21 @@ public class Skeleton_AI : MonoBehaviour
         health -= hitpoints;
         Debug.Log(health);
         if (health <= 0) Destroy(gameObject);
-        StartCoroutine(KnockBack());//IEnumeratoriu pradeda 
+        else KnockBack();
     }
-    public IEnumerator KnockBack()
+
+    void KnockBack()
     {
-        float timeris=0, z;
+        float timeris = 0, z;
         if (player.position.x >= gameObject.transform.position.x) z = -1;
-        else z = 1;
+        else z = 1; //puse i kuria skris
         allowChase = false;
-        while (timeris <= KnockDuration)
-        {
-            timeris += Time.deltaTime;
-            larry.AddForce(new Vector2(2*z, 1)* KnockPower);          
-        }
-        yield return 0;
+        larry.velocity = new Vector2(z * 2, 1) * KnockPower;
+        //while (timeris <= KnockDuration)
+        //{
+        //    timeris += Time.deltaTime;
+        //    larry.AddForce(new Vector2(2*z, 1)* KnockPower);          
+        //}
+
     }
 }

@@ -14,7 +14,9 @@ public partial class Movement {
         fallDamage();
         handleShift();
         Accelaration();
-        
+
+        if (gameObject.tag == "Respawn") dead = true;
+        if (dead == true) Destroy(GetComponent<Movement>());
 
         if (gScript.ground == true)
         {

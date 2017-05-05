@@ -51,7 +51,6 @@ public partial class Movement : MonoBehaviour
         anim.SetBool("Drifting Swap", swap);
         anim.SetBool("LShift", leftshift);
         anim.SetBool("IsRunning", isrunning);
-        anim.SetBool("Dead", dead);
         anim.SetFloat("Player_speed", player_speed);
         anim.SetBool("Attack", attack);
         // anim.SetBool("Sticky", sticky);
