@@ -30,12 +30,23 @@ public class Health : MonoBehaviour
             HealthBarDepletion(HealthLeft);
             mscript.FDamage = false;
         }
+       
     }
 
     public void HealthBarDepletion(float HealthLeft)
     {
-        Bar.transform.localScale = new Vector3(Bar.transform.localScale.x - HealthLeft, Bar.transform.localScale.y, Bar.transform.localScale.z);
+        Bar.transform.localScale = new Vector3(Bar.transform.localScale.x - (mscript.FallDamage / 300 ), Bar.transform.localScale.y, Bar.transform.localScale.z);
         if(CurrentHealth <= 0)
+        {
+            GameObject.Find("HealthBar").GetComponent<playerDeath>().enabled = true;
+            GameObject.Find("Player").GetComponent<Animator>().SetBool("Dead", true);
+        }
+    }
+    public void Damage(float Reduced)
+    {
+        CurrentHealth = CurrentHealth - Reduced;
+        Bar.transform.localScale = new Vector3(Bar.transform.localScale.x - (Reduced / 300), Bar.transform.localScale.y, Bar.transform.localScale.z);
+        if (CurrentHealth <= 0)
         {
             GameObject.Find("HealthBar").GetComponent<playerDeath>().enabled = true;
             GameObject.Find("Player").GetComponent<Animator>().SetBool("Dead", true);

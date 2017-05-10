@@ -149,7 +149,7 @@ public class Skeleton_AI : MonoBehaviour
         else swing = false;
     }
 
-    private float hitTimer=0.5f, hitTimerAtm=0.5f;
+    private float hitTimer=1.5f, hitTimerAtm=0.5f;
     void attack()
     {
         if(!attackScript.iSeeIt)
@@ -162,6 +162,7 @@ public class Skeleton_AI : MonoBehaviour
             if (transform.localScale.x == 1) puse = 1;
             else puse = -1;
             player.GetComponent<Rigidbody2D>().velocity = new Vector2(puse * 2, 1)*playerKnockPow;
+            GameObject.Find("Main Camera").SendMessageUpwards("Damage", 30);
             hitTimerAtm = hitTimer;
         }
     }
